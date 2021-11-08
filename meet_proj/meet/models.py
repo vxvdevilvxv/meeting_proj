@@ -19,17 +19,17 @@ class UserProfile(models.Model):
     email = models.EmailField(max_length=250, verbose_name='Email')
 
     class Meta:
-        verbose_name = 'Person'
-        verbose_name_plural = 'Persons'
+        verbose_name = 'Profile'
+        verbose_name_plural = 'Profiles'
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
 
-    @receiver(post_save, sender=User)  # add this
+    @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
             UserProfile.objects.create(user=instance)
 
-    @receiver(post_save, sender=User)  # add this
+    @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
-        instance.profile.save()
+        instance.userprofile.save()

@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import *
 
@@ -24,11 +23,17 @@ def create_user(request):
     return render(request, 'meet/register.html', {'form': form})
 
 
-def create_profile(request):
-    profile = request.user
-    print(profile)
-    return HttpResponse('Hello')
-    #return render(request, 'meet/create_profile.html', {'form': form})
+def profile_page_view(request):
+    if request.method == 'POST':
+        profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Успешное обновление профиля')
+        else:
+            messages.success(request, 'Ошибка обновления профиля')
+    else:
+        profile_form = UserProfileForm(instance=request.user.userprofile)
+    return render(request, 'meet/profile.html', {'profile_form': profile_form})
 
 
 def login_user(request):
