@@ -15,7 +15,7 @@ def create_user(request):
             user = form.save()
             login(request, user)
             messages.success(request, 'Успешная регистрация')
-            return redirect('create_profile')
+            return redirect('profile')
         else:
             messages.error(request, 'Ошибка регистрации')
     else:
@@ -38,7 +38,7 @@ def profile_page_view(request):
 
 def login_user(request):
     if request.method == 'POST':
-        form = UserAuthenticationForm(request.POST)
+        form = UserAuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
